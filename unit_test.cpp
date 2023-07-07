@@ -2,6 +2,7 @@
 
 
 // UnitTest class implementation
+std::vector<std::string> UnitTest::failed {};
 int UnitTest::failed_tests = 0;
 int UnitTest::equality_tests = 0;
 int UnitTest::exception_tests = 0;
@@ -16,7 +17,13 @@ void UnitTest::TestRunner::run_tests() {
     failed_tests = 0;
     int total_tests = 0;
     for (const auto& test : tests) total_tests += test();
-
     std::cout << std::endl << "Total tests passed: " << total_tests - failed_tests << "/" << total_tests << std::endl;
+
+    if (total_tests - failed_tests != total_tests) {
+        std::cout << "The following tests failed:" << std::endl;
+        for (const auto& val : failed) {
+            std::cout << val << std::endl;
+        }
+    }
 }
 

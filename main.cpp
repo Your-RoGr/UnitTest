@@ -31,16 +31,16 @@ int main() {
         int x = 5;
         int y = 10;
 
-        UnitTest::EqualityTest::assert_equals(x, y, "x and y should be equal");
-        UnitTest::EqualityTest::assert_equals(x, y);
-        UnitTest::EqualityTest::assert_not_equals(x, y, "x and y should not be equal");
-        UnitTest::EqualityTest::assert_not_equals(x, y);
+        UnitTest::EqualityTest::assert_equals(x, y, ".Equality", "x and y should be equal");
+        UnitTest::EqualityTest::assert_equals(x, y, ".Equality");
+        UnitTest::EqualityTest::assert_not_equals(x, y, ".Equality", "x and y should not be equal");
+        UnitTest::EqualityTest::assert_not_equals(x, y, ".Equality");
 
         y = 5;
 
-        UnitTest::EqualityTest::assert_equals(x, y, "x and y should be equal");
+        UnitTest::EqualityTest::assert_equals(x, y, ".Equality", "x and y should be equal");
         UnitTest::EqualityTest::assert_equals(x, y);
-        UnitTest::EqualityTest::assert_not_equals(x, y, "x and y should not be equal");
+        UnitTest::EqualityTest::assert_not_equals(x, y, ".Equality", "x and y should not be equal");
         UnitTest::EqualityTest::assert_not_equals(x, y);
         return 8;
     });
@@ -48,9 +48,9 @@ int main() {
     runner.add_tests([]() {
         std::cout << std::endl;
 
-        UnitTest::ExceptionTest::assert_throws<std::runtime_error>(my_test_exception_func_1);
+        UnitTest::ExceptionTest::assert_throws<std::runtime_error>(my_test_exception_func_1, ".Exception");
         UnitTest::ExceptionTest::assert_throws<std::runtime_error>(my_test_exception_func_2);
-        UnitTest::ExceptionTest::assert_does_not_throw(my_test_exception_func_1);
+        UnitTest::ExceptionTest::assert_does_not_throw(my_test_exception_func_1, ".Exception");
         UnitTest::ExceptionTest::assert_does_not_throw(my_test_exception_func_2);
         UnitTest::ExceptionTest::assert_does_not_throw(my_test_func_1);
         UnitTest::ExceptionTest::assert_does_not_throw(my_test_func_2);
@@ -62,25 +62,25 @@ int main() {
         int value1 = 10;
         int value2 = 20;
 
-        UnitTest::BoundaryTest::assert_less(value1, value2, "error");
-        UnitTest::BoundaryTest::assert_less_or_equal(value1, value2, "error");
-        UnitTest::BoundaryTest::assert_greater(value1, value2, "error");
-        UnitTest::BoundaryTest::assert_greater_or_equal(value1, value2, "error");
+        UnitTest::BoundaryTest::assert_less(value1, value2, ".Boundary", "error");
+        UnitTest::BoundaryTest::assert_less_or_equal(value1, value2, ".Boundary", "error");
+        UnitTest::BoundaryTest::assert_greater(value1, value2, ".Boundary", "error");
+        UnitTest::BoundaryTest::assert_greater_or_equal(value1, value2, ".Boundary", "error");
 
-        UnitTest::BoundaryTest::assert_less(value1, value2);
-        UnitTest::BoundaryTest::assert_less_or_equal(value1, value2);
-        UnitTest::BoundaryTest::assert_greater(value1, value2);
-        UnitTest::BoundaryTest::assert_greater_or_equal(value1, value2);
+        UnitTest::BoundaryTest::assert_less(value1, value2, ".Boundary");
+        UnitTest::BoundaryTest::assert_less_or_equal(value1, value2, ".Boundary");
+        UnitTest::BoundaryTest::assert_greater(value1, value2, ".Boundary");
+        UnitTest::BoundaryTest::assert_greater_or_equal(value1, value2, ".Boundary");
 
         std::cout << std::endl;
 
         value1 = 20;
         value2 = 10;
 
-        UnitTest::BoundaryTest::assert_less(value1, value2, "error");
-        UnitTest::BoundaryTest::assert_less_or_equal(value1, value2, "error");
-        UnitTest::BoundaryTest::assert_greater(value1, value2, "error");
-        UnitTest::BoundaryTest::assert_greater_or_equal(value1, value2, "error");
+        UnitTest::BoundaryTest::assert_less(value1, value2, ".Boundary", "error");
+        UnitTest::BoundaryTest::assert_less_or_equal(value1, value2, ".Boundary", "error");
+        UnitTest::BoundaryTest::assert_greater(value1, value2, ".Boundary", "error");
+        UnitTest::BoundaryTest::assert_greater_or_equal(value1, value2, ".Boundary", "error");
 
         UnitTest::BoundaryTest::assert_less(value1, value2);
         UnitTest::BoundaryTest::assert_less_or_equal(value1, value2);
