@@ -49,11 +49,11 @@ int main() {
         std::cout << std::endl;
 
         UnitTest::ExceptionTest::assert_throws<std::runtime_error>(my_test_exception_func_1, ".Exception");
-        UnitTest::ExceptionTest::assert_throws<std::runtime_error>(my_test_exception_func_2);
+        UnitTest::ExceptionTest::assert_throws<std::runtime_error>(my_test_exception_func_2, ".Exception");
         UnitTest::ExceptionTest::assert_does_not_throw(my_test_exception_func_1, ".Exception");
-        UnitTest::ExceptionTest::assert_does_not_throw(my_test_exception_func_2);
-        UnitTest::ExceptionTest::assert_does_not_throw(my_test_func_1);
-        UnitTest::ExceptionTest::assert_does_not_throw(my_test_func_2);
+        UnitTest::ExceptionTest::assert_does_not_throw(my_test_exception_func_2, ".Exception");
+        UnitTest::ExceptionTest::assert_does_not_throw(my_test_func_1, ".Exception");
+        UnitTest::ExceptionTest::assert_does_not_throw(my_test_func_2, ".Exception");
         return 6;
     });
 

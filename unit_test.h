@@ -12,13 +12,15 @@ class UnitTest {
 public:
     // TestRunner class for running tests
     /*
-     * TestRunner.add_tests([]() {
+     * TestRunner test_runner {};
+     * test_runner.add_tests([]() {
      *  std::cout << std::endl; // You can use other console functions if you need
      *
      *  int x = 5; // You can initialize the objects if you need
      *
      *  UnitTest::[Test class]::[Test for...](args...); // You can add more tests if you need
      *  return int(count tests)
+     *  test_runner.run_tests();
      * } */
     class TestRunner {
     public:
@@ -65,12 +67,12 @@ public:
     // ExceptionTest class for testing exception cases
     class ExceptionTest {
     public:
-        template<typename ExceptionType, typename FuncType>
-        static void assert_throws(const FuncType& func, const std::string& name = ".Exception") {
+        template<typename ExceptionType, typename FuncType, typename... Args>
+        static void assert_throws(const FuncType& func, const std::string& name, Args... args) {
 
             ++exception_tests;
             try {
-                func();
+                func(args...);
                 ++failed_tests;
                 std::cout << '#' << exception_tests << name << " ExceptionTest FAILED. Expected an exception, but no "
                                                                "exception was thrown." << std::endl;
@@ -91,12 +93,12 @@ public:
             }
         }
 
-        template<typename FuncType>
-        static void assert_does_not_throw(const FuncType& func, const std::string& name = ".Exception") {
+        template<typename FuncType, typename... Args>
+        static void assert_does_not_throw(const FuncType& func, const std::string& name, Args... args) {
 
             ++exception_tests;
             try {
-                func();
+                func(args...);
                 std::cout << '#' << exception_tests << name << " No ExceptionTest PASSED" << std::endl;
             } catch (const std::exception& e) {
                 ++failed_tests;
