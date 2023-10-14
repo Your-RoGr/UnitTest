@@ -29,9 +29,9 @@ public:
      *  int x = 5; // You can initialize the objects if you need
      *
      *  UnitTest::[Test class]::[Test for...](args...); // You can add more tests if you need
-     *  return int(count tests)
-     *  test_runner.run_tests();
-     * } */
+     * }
+     * test_runner.run_tests();
+     * */
     class TestRunner {
     public:
         TestRunner();
