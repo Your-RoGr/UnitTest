@@ -19,14 +19,35 @@ void my_test_exception_func_2() {
     throw std::logic_error("An error occurred");
 }
 
-int main() {
+void my_test_time_func_1() {
+    std::vector<int> vec {};
+    for (int i = 0; i < 10000; ++i) {
+        vec.push_back(i);
+    }
+}
 
+void my_test_time_func_2(int x) {
+    std::vector<int> vec {};
+    for (int i = 0; i < x; ++i) {
+        vec.push_back(i);
+    }
+}
+
+void my_test_time_func_3(int y, int z) {
+    std::vector<int> vec {};
+    for (int i = 0; i < y; ++i) {
+        vec.push_back(z);
+    }
+}
+
+
+int main() {
     std::cout << std::endl << "TestRunner" << std::endl;
 
     UnitTest::TestRunner runner;
+    UnitTest::TestRunner::clear_all_logs(true);
 
     runner.add_tests([]() {
-        std::cout << std::endl;
 
         int x = 5;
         int y = 10;
@@ -46,7 +67,6 @@ int main() {
     });
 
     runner.add_tests([]() {
-        std::cout << std::endl;
 
         UnitTest::ExceptionTest::assert_throws<std::runtime_error>(my_test_exception_func_1, ".Exception");
         UnitTest::ExceptionTest::assert_throws<std::runtime_error>(my_test_exception_func_2, ".Exception");
@@ -58,7 +78,6 @@ int main() {
     });
 
     runner.add_tests([]() {
-        std::cout << std::endl;
         int value1 = 10;
         int value2 = 20;
 
@@ -71,8 +90,6 @@ int main() {
         UnitTest::BoundaryTest::assert_less_or_equal(value1, value2, ".Boundary");
         UnitTest::BoundaryTest::assert_greater(value1, value2, ".Boundary");
         UnitTest::BoundaryTest::assert_greater_or_equal(value1, value2, ".Boundary");
-
-        std::cout << std::endl;
 
         value1 = 20;
         value2 = 10;
@@ -89,10 +106,16 @@ int main() {
         return 16;
     });
 
+    runner.add_tests([]() {
+
+        UnitTest::PerformanceTest::time_test(my_test_time_func_1, ".Performance", 1.0f);
+        UnitTest::PerformanceTest::time_test(my_test_time_func_2, ".Performance", 10.0f, 1000000);
+        UnitTest::PerformanceTest::time_test(my_test_time_func_3, ".Performance", 5.0f, 1000000, 10);
+
+        return 3;
+    });
     runner.run_tests();
 
-    std::cout << std::endl;
-
-    system("pause");
+    //system("pause");
     return 0;
 }

@@ -7,6 +7,19 @@ int UnitTest::failed_tests = 0;
 int UnitTest::equality_tests = 0;
 int UnitTest::exception_tests = 0;
 int UnitTest::boundary_tests = 0;
+int UnitTest::performance_tests = 0;
+int UnitTest::concurrency_tests = 0;
+Logger UnitTest::logger {"_unit_tests.log"};
+
+UnitTest::TestRunner::TestRunner() {
+    UnitTest::logger.set_use_console_log(false);
+    UnitTest::logger.set_log_level_file(Logger::LogLevel::INFO);
+}
+
+void UnitTest::TestRunner::clear_all_logs(bool clear_all_) {
+    UnitTest::logger.set_clear_all(clear_all_);
+    UnitTest::logger.set_filename("_unit_tests.log");
+}
 
 // TestRunner class implementation
 void UnitTest::TestRunner::add_tests(std::function<int()> tests_) {
@@ -17,13 +30,14 @@ void UnitTest::TestRunner::run_tests() {
     failed_tests = 0;
     int total_tests = 0;
     for (const auto& test : tests) total_tests += test();
-    std::cout << std::endl << "Total tests passed: " << total_tests - failed_tests << "/" << total_tests << std::endl;
+    logger.info("Total tests passed: " + std::to_string(total_tests- failed_tests) + '/'
+    + std::to_string(total_tests));
 
     if (total_tests - failed_tests != total_tests) {
-        std::cout << "The following tests failed:" << std::endl;
+        std::string str {};
         for (const auto& val : failed) {
-            std::cout << val << std::endl;
+            str += '\n' + val;
         }
+        logger.warning("The following tests failed:" + str);
     }
 }
-

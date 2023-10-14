@@ -1,20 +1,29 @@
 #ifndef UNIT_TEST_H
 #define UNIT_TEST_H
 
-#include <iostream>
 #include <string>
 #include <functional>
 #include <vector>
 #include <utility>
-
+#include <memory>
+#include "Timer/timer.h"
+#include "Logger/logger.h"
 
 class UnitTest {
+private:
+    int static failed_tests;
+    int static equality_tests;
+    int static exception_tests;
+    int static boundary_tests;
+    int static performance_tests;
+    int static concurrency_tests;
+    std::vector<std::string> static failed;
+    Logger static logger;
 public:
     // TestRunner class for running tests
     /*
      * TestRunner test_runner {};
      * test_runner.add_tests([]() {
-     *  std::cout << std::endl; // You can use other console functions if you need
      *
      *  int x = 5; // You can initialize the objects if you need
      *
@@ -24,6 +33,8 @@ public:
      * } */
     class TestRunner {
     public:
+        TestRunner();
+        static void clear_all_logs(bool clear_all_);
         void add_tests(std::function<int()> tests_);
         void run_tests();
     private:
@@ -39,11 +50,11 @@ public:
 
             ++equality_tests;
             if (actual == expected) {
-                std::cout << '#' << equality_tests << name << " EqualityTest PASSED" << std::endl;
+                logger.info('#' + std::to_string(equality_tests) + name + " EqualityTest PASSED");
             } else {
                 ++failed_tests;
-                std::cout << '#' << equality_tests << name << " EqualityTest FAILED: " << message << ". Expected: "
-                << expected << ", Actual: " << actual << std::endl;
+                logger.warning('#' + std::to_string(equality_tests) + name + " EqualityTest FAILED: "
+                + message + ". Expected: " + std::to_string(expected) + ", Actual: " + std::to_string(actual));
                 failed.push_back('#' + std::to_string(failed_tests) + name);
             }
         }
@@ -54,11 +65,12 @@ public:
 
             ++equality_tests;
             if (actual != expected) {
-                std::cout << '#' << equality_tests << name << " No EqualityTest PASSED" << std::endl;
+                logger.info('#' + std::to_string(equality_tests) + name + " No EqualityTest PASSED");
             } else {
                 ++failed_tests;
-                std::cout << '#' << equality_tests << name << " No EqualityTest FAILED: " << message << ". Expected: "
-                << expected << ", Actual: " << actual << std::endl;
+                logger.warning('#' + std::to_string(equality_tests) + name + " No EqualityTest FAILED: "
+                               + message + ". Expected: " + std::to_string(expected) + ", Actual: "
+                               + std::to_string(actual));
                 failed.push_back('#' + std::to_string(failed_tests) + name);
             }
         }
@@ -74,21 +86,22 @@ public:
             try {
                 func(args...);
                 ++failed_tests;
-                std::cout << '#' << exception_tests << name << " ExceptionTest FAILED. Expected an exception, but no "
-                                                               "exception was thrown." << std::endl;
+                logger.warning('#' + std::to_string(exception_tests) + name
+                + " ExceptionTest FAILED. Expected an exception, but no exception was thrown.");
                 failed.push_back('#' + std::to_string(exception_tests) + name);
             } catch (const ExceptionType& e) {
-                std::cout << '#' << exception_tests << name << " ExceptionTest PASSED" << std::endl;
+                logger.info('#' + std::to_string(exception_tests) + name + " ExceptionTest PASSED");
             } catch (const std::exception& e) {
                 ++failed_tests;
-                std::cout << '#' << exception_tests << name << " ExceptionTest FAILED: " << e.what()
-                << ". Expected an exception of type " << typeid(ExceptionType).name()
-                << ", but a different type of exception was thrown." << std::endl;
+                logger.warning('#' + std::to_string(exception_tests) + name
+                               + " ExceptionTest FAILED: " + e.what() + ". Expected an exception of type "
+                               + typeid(ExceptionType).name() + ", but a different type of exception was thrown.");
                 failed.push_back('#' + std::to_string(exception_tests) + name);
             } catch (...) {
                 ++failed_tests;
-                std::cout << '#' << exception_tests << name << " ExceptionTest FAILED. Expected an exception of type "
-                << typeid(ExceptionType).name() << ", but a different type of exception was thrown." << std::endl;
+                logger.error('#' + std::to_string(exception_tests) + name
+                               + " ExceptionTest FAILED. Expected an exception of type "
+                               + typeid(ExceptionType).name() + ", but a different type of exception was thrown.");
                 failed.push_back('#' + std::to_string(exception_tests) + name);
             }
         }
@@ -99,16 +112,17 @@ public:
             ++exception_tests;
             try {
                 func(args...);
-                std::cout << '#' << exception_tests << name << " No ExceptionTest PASSED" << std::endl;
+                logger.info('#' + std::to_string(exception_tests) + name + " No ExceptionTest PASSED");
             } catch (const std::exception& e) {
                 ++failed_tests;
-                std::cout << '#' << exception_tests << name << " No ExceptionTest FAILED: " << e.what() << std::endl;
+                logger.warning('#' + std::to_string(exception_tests) + name
+                + " No ExceptionTest FAILED: " + e.what());
                 failed.push_back('#' + std::to_string(exception_tests) + name);
             } catch (...) {
                 ++failed_tests;
-                std::cout << '#' << exception_tests << name << " No ExceptionTest FAILED. Expected no exception to be "
-                                                               "thrown, but a different type of exception was thrown."
-                                                               << std::endl;
+                logger.error('#' + std::to_string(exception_tests) + name
+                + " No ExceptionTest FAILED. Expected no exception to be thrown, but a different type of "
+                  "exception was thrown.");
                 failed.push_back('#' + std::to_string(exception_tests) + name);
             }
         }
@@ -123,11 +137,11 @@ public:
 
             ++boundary_tests;
             if (value1 < value2) {
-                std::cout << '#' << boundary_tests << name << " assert_less PASSED" << std::endl;
+                logger.info('#' + std::to_string(boundary_tests) + name + " assert_less PASSED");
             } else {
                 ++failed_tests;
-                std::cout << '#' << boundary_tests << name << " assert_less FAILED: " << message << ". Expected "
-                << value1 << " to be less than " << value2 << std::endl;
+                logger.warning('#' + std::to_string(boundary_tests) + name + " assert_less FAILED: "
+                + message + ". Expected " + std::to_string(value1) + " to be less than " + std::to_string(value2));
                 failed.push_back('#' + std::to_string(boundary_tests) + name);
             }
         }
@@ -138,11 +152,12 @@ public:
 
             ++boundary_tests;
             if (value1 <= value2) {
-                std::cout << '#' << boundary_tests << name << " assert_less_or_equal PASSED" << std::endl;
+                logger.info('#' + std::to_string(boundary_tests) + name + " assert_less_or_equal PASSED");
             } else {
                 ++failed_tests;
-                std::cout << '#' << boundary_tests << name << " assert_less_or_equal FAILED: " << message
-                << ". Expected " << value1 << " to be less than or equal to " << value2 << std::endl;
+                logger.warning('#' + std::to_string(boundary_tests) + name
+                + " assert_less_or_equal FAILED: " + message + ". Expected " + std::to_string(value1)
+                + " to be less than or equal to " + std::to_string(value2));
                 failed.push_back('#' + std::to_string(boundary_tests) + name);
             }
         }
@@ -153,11 +168,12 @@ public:
 
             ++boundary_tests;
             if (value1 > value2) {
-                std::cout << '#' << boundary_tests << name << " assert_greater PASSED" << std::endl;
+                logger.info('#' + std::to_string(boundary_tests) + name + " assert_greater PASSED");
             } else {
                 ++failed_tests;
-                std::cout << '#' << boundary_tests << name << " assert_greater FAILED: " << message << ". Expected "
-                << value1 << " to be greater than " << value2 << std::endl;
+                logger.warning('#' + std::to_string(boundary_tests) + name
+                + " assert_greater FAILED: " + message + ". Expected " + std::to_string(value1) + " to be greater than "
+                + std::to_string(value2));
                 failed.push_back('#' + std::to_string(boundary_tests) + name);
             }
         }
@@ -168,21 +184,60 @@ public:
 
             ++boundary_tests;
             if (value1 >= value2) {
-                std::cout << '#' << boundary_tests << name << " assert_greater_or_equal PASSED" << std::endl;
+                logger.info('#' + std::to_string(boundary_tests) + name + " assert_greater_or_equal PASSED");
             } else {
                 ++failed_tests;
-                std::cout << '#' << boundary_tests << name << " assert_greater_or_equal FAILED: " << message
-                << ". Expected " << value1 << " to be greater than or equal to " << value2 << std::endl;
+                logger.warning('#' + std::to_string(boundary_tests) + name
+                + " assert_greater_or_equal FAILED: " + message + ". Expected " + std::to_string(value1)
+                + " to be greater than or equal to " + std::to_string(value2));
                 failed.push_back('#' + std::to_string(boundary_tests) + name);
             }
         }
     };
 
-private:
-    int static failed_tests;
-    int static equality_tests;
-    int static exception_tests;
-    int static boundary_tests;
-    std::vector<std::string> static failed;
+    class PerformanceTest {
+    public:
+        template<typename FuncType, typename... Args>
+        static void time_test(const FuncType& func, const std::string& name, const float expected_time, Args... args) {
+
+            ++performance_tests;
+            try {
+
+                auto get_time = [&]() {
+                    Timer T {};
+                    func(args...);
+                    return T.get_current_time();
+                };
+
+                auto time = get_time() * 1000;
+                if (expected_time > time) {
+                    logger.info('#' + std::to_string(performance_tests) + name + " time_test PASSED"
+                    + ": " + std::to_string(time) + " ms");
+                } else {
+                    ++failed_tests;
+                    logger.warning('#' + std::to_string(performance_tests) + name
+                    + " time_test FAILED" + ": " + std::to_string(time) + " ms");
+                    failed.push_back('#' + std::to_string(performance_tests) + name);
+                }
+            } catch (const std::exception& e) {
+                ++failed_tests;
+                logger.error('#' + std::to_string(performance_tests) + name
+                + " time_test FAILED: " + e.what());
+                failed.push_back('#' + std::to_string(performance_tests) + name);
+            } catch (...) {
+                ++failed_tests;
+                logger.error('#' + std::to_string(performance_tests) + name
+                + " time_test FAILED. Expected no exception to be thrown, but a different type of exception "
+                 "was thrown.");
+                failed.push_back('#' + std::to_string(performance_tests) + name);
+            }
+        }
+    };
+/*    class ConcurrencyTest {
+    public:
+        template<typename T>
+        static void
+    };*/
+
 };
 #endif //UNIT_TEST_H
