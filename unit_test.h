@@ -36,10 +36,10 @@ public:
     public:
         TestRunner();
         static void clear_all_logs(bool clear_all_);
-        void add_tests(std::function<int()> tests_);
+        void add_tests(std::function<void()> tests_);
         void run_tests();
     private:
-        std::vector<std::function<int()>> tests {};
+        std::vector<std::function<void()>> tests {};
     };
 
     // EqualityTest class for testing equality of values
@@ -204,13 +204,14 @@ public:
             ++performance_tests;
             try {
 
-                auto get_time = [&]() {
+                auto get_time = [&func, &args...]() {
                     Timer T {};
                     func(args...);
                     return T.get_current_time();
                 };
 
                 auto time = get_time() * 1000;
+
                 if (expected_time > time) {
                     logger.info('#' + std::to_string(performance_tests) + name + " time_test PASSED"
                     + ": " + std::to_string(time) + " ms");
@@ -242,7 +243,7 @@ public:
 
             ++concurrency_tests;
 
-            auto get_time = [&]() {
+            auto get_time = [&func, &args..., &name]() {
                 Timer T {};
                 try {
                     func(args...);

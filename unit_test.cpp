@@ -22,14 +22,14 @@ void UnitTest::TestRunner::clear_all_logs(bool clear_all_) {
 }
 
 // TestRunner class implementation
-void UnitTest::TestRunner::add_tests(std::function<int()> tests_) {
+void UnitTest::TestRunner::add_tests(std::function<void()> tests_) {
     tests.push_back(std::move(tests_));
 }
 
 void UnitTest::TestRunner::run_tests() {
     failed_tests = 0;
-    int total_tests = 0;
-    for (const auto& test : tests) total_tests += test();
+    for (const auto& test : tests) test();
+    int total_tests = equality_tests + exception_tests + boundary_tests + performance_tests + concurrency_tests;
     logger.info("Total tests passed: " + std::to_string(total_tests- failed_tests) + '/'
     + std::to_string(total_tests));
 

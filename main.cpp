@@ -1,5 +1,4 @@
 #include <iostream>
-#include <thread>
 #include <random>
 #include "unit_test.h"
 
@@ -89,7 +88,6 @@ int main() {
         UnitTest::EqualityTest::assert_equals(x, y);
         UnitTest::EqualityTest::assert_not_equals(x, y, ".Equality", "x and y should not be equal");
         UnitTest::EqualityTest::assert_not_equals(x, y);
-        return 8;
     });
 
     runner.add_tests([]() {
@@ -100,7 +98,6 @@ int main() {
         UnitTest::ExceptionTest::assert_does_not_throw(my_test_exception_func_2, ".Exception");
         UnitTest::ExceptionTest::assert_does_not_throw(my_test_func_1, ".Exception");
         UnitTest::ExceptionTest::assert_does_not_throw(my_test_func_2, ".Exception");
-        return 6;
     });
 
     runner.add_tests([]() {
@@ -129,16 +126,12 @@ int main() {
         UnitTest::BoundaryTest::assert_less_or_equal(value1, value2);
         UnitTest::BoundaryTest::assert_greater(value1, value2);
         UnitTest::BoundaryTest::assert_greater_or_equal(value1, value2);
-        return 16;
     });
 
     runner.add_tests([]() {
-
         UnitTest::PerformanceTest::time_test(my_test_time_func_1, ".Performance", 1.0f);
         UnitTest::PerformanceTest::time_test(my_test_time_func_2, ".Performance", 10.0f, 1000000);
         UnitTest::PerformanceTest::time_test(my_test_time_func_3, ".Performance", 5.0f, 1000000, 10);
-
-        return 3;
     });
 
     runner.add_tests([]() {
@@ -155,8 +148,6 @@ int main() {
         UnitTest::ConcurrencyTest::thread_test(my_test_thread_func_3, ".Concurrency", 8);
         UnitTest::ConcurrencyTest::thread_test(my_test_thread_func_3, ".Concurrency", 16);
         UnitTest::ConcurrencyTest::thread_test(my_test_thread_func_3, ".Concurrency", 100);
-
-        return 10;
     });
 
     runner.run_tests();
