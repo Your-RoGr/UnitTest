@@ -6,6 +6,7 @@
 #include <vector>
 #include <utility>
 #include <memory>
+#include <thread>
 #include "Timer/timer.h"
 #include "Logger/logger.h"
 
@@ -233,11 +234,68 @@ public:
             }
         }
     };
-/*    class ConcurrencyTest {
-    public:
-        template<typename T>
-        static void
-    };*/
 
+    class ConcurrencyTest {
+    public:
+        template<typename FuncType, typename... Args>
+        static void thread_test(const FuncType& func, const std::string& name, const size_t expected_threads, Args... args) {
+
+            ++concurrency_tests;
+
+            auto get_time = [&]() {
+                Timer T {};
+                try {
+                    func(args...);
+                } catch (const std::exception& e) {
+                    logger.error('#' + std::to_string(concurrency_tests) + name
+                                 + " thread_test: " + e.what());
+                } catch (...) {
+                    logger.error('#' + std::to_string(concurrency_tests) + name
+                                 + " thread_test. Expected no exception to be thrown, but a different type of exception "
+                                   "was thrown.");
+                }
+                return T.get_current_time();
+            };
+
+            auto time = (get_time() * 1000) * expected_threads * 2;
+
+            std::atomic<size_t> counter {};
+            auto new_func = [&counter, &func, &args..., &name](){
+                try {
+                    func(args...);
+                    ++counter;
+                } catch (const std::exception& e) {
+                    logger.error('#' + std::to_string(concurrency_tests) + name
+                                 + " thread_test#" + std::to_string(counter) + ": " + e.what());
+                } catch (...) {
+                    logger.error('#' + std::to_string(concurrency_tests) + name
+                    + " thread_test#" + std::to_string(counter) + ". Expected no exception to be thrown, "
+                                                                  "but a different type of exception "
+                                                                  "was thrown.");
+                }
+            };
+
+            for (int i = 0; i < expected_threads; ++i) {
+                std::thread t(new_func);
+                t.detach();
+            }
+
+            if (static_cast<long long int>(time) > 1) {
+                std::this_thread::sleep_for(std::chrono::milliseconds(static_cast<long long int>(time)));
+            } else {
+                std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            }
+
+            if (counter == expected_threads) {
+                logger.info('#' + std::to_string(concurrency_tests) + name + " thread_test PASSED: "
+                + std::to_string(counter) + '/' + std::to_string(expected_threads));
+            } else {
+                ++failed_tests;
+                logger.warning('#' + std::to_string(concurrency_tests) + name + " thread_test FAILED: "
+                + std::to_string(counter) + '/' + std::to_string(expected_threads));
+                failed.push_back('#' + std::to_string(concurrency_tests) + name);
+            }
+        }
+    };
 };
 #endif //UNIT_TEST_H

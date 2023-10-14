@@ -1,4 +1,6 @@
 #include <iostream>
+#include <thread>
+#include <random>
 #include "unit_test.h"
 
 
@@ -40,6 +42,30 @@ void my_test_time_func_3(int y, int z) {
     }
 }
 
+std::mutex mtx_1 {};
+void my_test_thread_func_1(int iterations) {
+    for (int i = 0; i < iterations; ++i) {
+        std::lock_guard<std::mutex> lock(mtx_1);
+    }
+}
+
+void my_test_thread_func_2() {
+    throw std::runtime_error("my_test_thread_func_2 is joking");
+}
+
+std::random_device rd;
+std::mt19937 gen(rd());
+std::uniform_int_distribution<int> distribution(1, 10);
+
+std::mutex mtx_3 {};
+void my_test_thread_func_3() {
+    if (distribution(gen) == 5) {
+        throw std::runtime_error("my_test_thread_func_2 is joking");
+    } else {
+        std::lock_guard<std::mutex> lock(mtx_3);
+        std::cout << "Nope" << std::endl;
+    }
+}
 
 int main() {
     std::cout << std::endl << "TestRunner" << std::endl;
@@ -114,6 +140,25 @@ int main() {
 
         return 3;
     });
+
+    runner.add_tests([]() {
+
+        const int num_threads = 4;
+
+        UnitTest::ConcurrencyTest::thread_test(my_test_thread_func_1, ".Concurrency", num_threads, 1000);
+        UnitTest::ConcurrencyTest::thread_test(my_test_thread_func_1, ".Concurrency", 8, 1000);
+        UnitTest::ConcurrencyTest::thread_test(my_test_thread_func_1, ".Concurrency", 16, 1000);
+        UnitTest::ConcurrencyTest::thread_test(my_test_thread_func_2, ".Concurrency", num_threads);
+        UnitTest::ConcurrencyTest::thread_test(my_test_thread_func_2, ".Concurrency", 8);
+        UnitTest::ConcurrencyTest::thread_test(my_test_thread_func_2, ".Concurrency", 16);
+        UnitTest::ConcurrencyTest::thread_test(my_test_thread_func_3, ".Concurrency", num_threads);
+        UnitTest::ConcurrencyTest::thread_test(my_test_thread_func_3, ".Concurrency", 8);
+        UnitTest::ConcurrencyTest::thread_test(my_test_thread_func_3, ".Concurrency", 16);
+        UnitTest::ConcurrencyTest::thread_test(my_test_thread_func_3, ".Concurrency", 100);
+
+        return 10;
+    });
+
     runner.run_tests();
 
     //system("pause");
