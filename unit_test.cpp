@@ -10,10 +10,15 @@ int UnitTest::boundary_tests = 0;
 int UnitTest::performance_tests = 0;
 int UnitTest::concurrency_tests = 0;
 Logger UnitTest::logger {"_unit_tests.log"};
+Profiler UnitTest::profiler {};
 
 UnitTest::TestRunner::TestRunner() {
     UnitTest::logger.set_use_console_log(false);
     UnitTest::logger.set_log_level_file(Logger::LogLevel::INFO);
+}
+
+UnitTest::TestRunner::~TestRunner() {
+    if (t.joinable()) t.join();
 }
 
 void UnitTest::TestRunner::clear_all_logs(bool clear_all_) {
@@ -41,3 +46,4 @@ void UnitTest::TestRunner::run_tests() {
         logger.warning("The following tests failed:" + str);
     }
 }
+

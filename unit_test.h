@@ -9,6 +9,7 @@
 #include <thread>
 #include "Timer/timer.h"
 #include "Logger/logger.h"
+#include "Profiler/profiler.h"
 
 class UnitTest {
 private:
@@ -20,6 +21,7 @@ private:
     int static concurrency_tests;
     std::vector<std::string> static failed;
     Logger static logger;
+    Profiler static profiler;
 public:
     // TestRunner class for running tests
     /*
@@ -35,10 +37,12 @@ public:
     class TestRunner {
     public:
         TestRunner();
+        ~TestRunner();
         static void clear_all_logs(bool clear_all_);
         void add_tests(std::function<void()> tests_);
         void run_tests();
     private:
+        std::thread t {system, "Profiler.exe"};
         std::vector<std::function<void()>> tests {};
     };
 
