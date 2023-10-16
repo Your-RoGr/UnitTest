@@ -12,7 +12,11 @@ int UnitTest::concurrency_tests = 0;
 Logger UnitTest::logger {"_unit_tests.log"};
 Profiler UnitTest::profiler {100};
 
-UnitTest::TestRunner::TestRunner() {
+UnitTest::TestRunner::TestRunner(const std::string& type) {
+    std::string command = "Profiler.exe " + type;
+    t = std::thread {[command](){
+        system(command.c_str());
+    }};
     UnitTest::logger.set_use_console_log(false);
     UnitTest::logger.set_log_level_file(Logger::LogLevel::INFO);
 }

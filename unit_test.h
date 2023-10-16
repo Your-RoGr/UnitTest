@@ -36,13 +36,13 @@ public:
      * */
     class TestRunner {
     public:
-        TestRunner();
+        explicit TestRunner(const std::string& type = "bytes");
         ~TestRunner();
         static void clear_all_logs(bool clear_all_);
         void add_tests(std::function<void()> tests_);
         void run_tests();
     private:
-        std::thread t {system, "Profiler.exe"};
+        std::thread t;
         std::vector<std::function<void()>> tests {};
     };
 

@@ -70,7 +70,7 @@ void my_test_thread_func_3() {
 int main() {
     std::cout << std::endl << "TestRunner" << std::endl;
 
-    UnitTest::TestRunner runner;
+    UnitTest::TestRunner runner {"mb"};
     UnitTest::TestRunner::clear_all_logs(true);
 
     runner.add_tests([]() {

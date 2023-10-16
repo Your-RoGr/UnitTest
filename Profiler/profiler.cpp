@@ -2,8 +2,8 @@
 #include "Source/usleep.h"
 
 
-Profiler::Profiler(size_t _microseconds) : profiling(true), profiler_filename("_profiler.csv"),
-profiler_file(profiler_filename), tests_filename("_tests.csv"), tests_file(tests_filename),
+Profiler::Profiler(size_t _microseconds) : profiling(true), profiler_filename(".profiler.csv"),
+profiler_file(profiler_filename), tests_filename(".tests.csv"), tests_file(tests_filename),
 microseconds(_microseconds) {
 
     if (!profiler_file.is_open()) {
@@ -26,6 +26,7 @@ microseconds(_microseconds) {
 }
 
 Profiler::~Profiler() {
+
     stop();
 
     if (profiler_file.is_open()) {
@@ -34,6 +35,22 @@ Profiler::~Profiler() {
 
     if (tests_file.is_open()) {
         tests_file.close();
+    }
+
+    try {
+        std::remove(profiler_filename.c_str());
+    } catch (const std::exception& e) {
+        std::cout << e.what() << std::endl;
+    } catch (...) {
+        std::cout << "File deletion error: " << profiler_filename << std::endl;
+    }
+
+    try {
+        std::remove(tests_filename.c_str());
+    } catch (const std::exception& e) {
+        std::cout << e.what() << std::endl;
+    } catch (...) {
+        std::cout << "File deletion error: " << tests_filename << std::endl;
     }
 }
 
