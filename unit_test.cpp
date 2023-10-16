@@ -10,7 +10,7 @@ int UnitTest::boundary_tests = 0;
 int UnitTest::performance_tests = 0;
 int UnitTest::concurrency_tests = 0;
 Logger UnitTest::logger {"_unit_tests.log"};
-Profiler UnitTest::profiler {};
+Profiler UnitTest::profiler {100};
 
 UnitTest::TestRunner::TestRunner() {
     UnitTest::logger.set_use_console_log(false);

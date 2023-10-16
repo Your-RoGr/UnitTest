@@ -62,6 +62,7 @@ public:
                 + message + ". Expected: " + std::to_string(expected) + ", Actual: " + std::to_string(actual));
                 failed.push_back('#' + std::to_string(failed_tests) + name);
             }
+            profiler.add_test('#' + std::to_string(equality_tests) + name);
         }
 
         template<typename T>
@@ -78,6 +79,7 @@ public:
                                + std::to_string(actual));
                 failed.push_back('#' + std::to_string(failed_tests) + name);
             }
+            profiler.add_test('#' + std::to_string(equality_tests) + name);
         }
     };
 
@@ -109,6 +111,7 @@ public:
                                + typeid(ExceptionType).name() + ", but a different type of exception was thrown.");
                 failed.push_back('#' + std::to_string(exception_tests) + name);
             }
+            profiler.add_test('#' + std::to_string(exception_tests) + name);
         }
 
         template<typename FuncType, typename... Args>
@@ -130,6 +133,7 @@ public:
                   "exception was thrown.");
                 failed.push_back('#' + std::to_string(exception_tests) + name);
             }
+            profiler.add_test('#' + std::to_string(exception_tests) + name);
         }
     };
 
@@ -149,6 +153,7 @@ public:
                 + message + ". Expected " + std::to_string(value1) + " to be less than " + std::to_string(value2));
                 failed.push_back('#' + std::to_string(boundary_tests) + name);
             }
+            profiler.add_test('#' + std::to_string(boundary_tests) + name);
         }
 
         template<typename T>
@@ -165,6 +170,7 @@ public:
                 + " to be less than or equal to " + std::to_string(value2));
                 failed.push_back('#' + std::to_string(boundary_tests) + name);
             }
+            profiler.add_test('#' + std::to_string(boundary_tests) + name);
         }
 
         template<typename T>
@@ -181,6 +187,7 @@ public:
                 + std::to_string(value2));
                 failed.push_back('#' + std::to_string(boundary_tests) + name);
             }
+            profiler.add_test('#' + std::to_string(boundary_tests) + name);
         }
 
         template<typename T>
@@ -197,6 +204,7 @@ public:
                 + " to be greater than or equal to " + std::to_string(value2));
                 failed.push_back('#' + std::to_string(boundary_tests) + name);
             }
+            profiler.add_test('#' + std::to_string(boundary_tests) + name);
         }
     };
 
@@ -237,6 +245,7 @@ public:
                  "was thrown.");
                 failed.push_back('#' + std::to_string(performance_tests) + name);
             }
+            profiler.add_test('#' + std::to_string(performance_tests) + name);
         }
     };
 
@@ -300,6 +309,7 @@ public:
                 + std::to_string(counter) + '/' + std::to_string(expected_threads));
                 failed.push_back('#' + std::to_string(concurrency_tests) + name);
             }
+            profiler.add_test('#' + std::to_string(concurrency_tests) + name);
         }
     };
 };

@@ -7,26 +7,38 @@
 #include <thread>
 #include <mutex>
 #include <fstream>
-#include "get_memory_usage.h"
+#include "Source/get_memory_usage.h"
 #include "../Timer/timer.h"
 
 class Profiler {
 private:
     Timer T {};
-    std::ofstream file;
-    std::string filename;
-    std::thread t_profiler;
-    std::mutex mtx {};
-    size_t milliseconds = 10;
+    std::ofstream profiler_file;
+    std::ofstream tests_file;
+    std::string profiler_filename;
+    std::string tests_filename;
+    std::thread profiler_t;
+    std::mutex profiler_mtx {};
+    size_t microseconds = 10;
     bool profiling {};
 
 public:
-    explicit Profiler(size_t _milliseconds = 10);
-    ~Profiler();
 
+    explicit Profiler(size_t _microseconds = 100);
+    void add_test(const std::string& test);
+    ~Profiler();
 private:
     void stop();
-    void str_to_CSV(float time, size_t ram);
+
+    template<typename T>
+    void str_to_CSV(std::ofstream& file, const std::string& filename, float time, T data) {
+        if (!file.is_open()) {
+            file.open(filename, std::ios_base::app);
+        }
+        file << time << "," << data << '\n';
+        file.flush();
+    }
+
     void profiler_thread_function();
 };
 

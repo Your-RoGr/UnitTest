@@ -5,6 +5,7 @@
 
 void my_test_func_1() {
     std::cout << "my_test_func_1 done" << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(3));
 }
 
 void my_test_func_2() {

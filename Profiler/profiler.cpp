@@ -1,40 +1,57 @@
 #include "profiler.h"
+#include "Source/usleep.h"
 
-Profiler::Profiler(size_t _milliseconds) : profiling(true), filename("_profiler.csv"), file(filename), milliseconds(_milliseconds) {
 
-    if (!file.is_open()) {
-        file.open(filename);
+Profiler::Profiler(size_t _microseconds) : profiling(true), profiler_filename("_profiler.csv"),
+profiler_file(profiler_filename), tests_filename("_tests.csv"), tests_file(tests_filename),
+microseconds(_microseconds) {
+
+    if (!profiler_file.is_open()) {
+        profiler_file.open(profiler_filename);
     }
-    file << "time,RAM\n";
-    file.close();
-    file.open(filename, std::ios_base::app);
-    t_profiler = std::thread(&Profiler::profiler_thread_function, this);
+
+    profiler_file << "time,RAM\n";
+    profiler_file.close();
+    profiler_file.open(profiler_filename, std::ios_base::app);
+
+    if (!tests_file.is_open()) {
+        tests_file.open(tests_filename);
+    }
+
+    tests_file << "time,labels\n";
+    tests_file.close();
+    tests_file.open(tests_filename, std::ios_base::app);
+
+    profiler_t = std::thread(&Profiler::profiler_thread_function, this);
 }
 
 Profiler::~Profiler() {
     stop();
-    if (file.is_open()) {
-        file.close();
+
+    if (profiler_file.is_open()) {
+        profiler_file.close();
+    }
+
+    if (tests_file.is_open()) {
+        tests_file.close();
     }
 }
 
 void Profiler::stop() {
     profiling = false;
-    if (t_profiler.joinable()) t_profiler.join();
-}
-
-void Profiler::str_to_CSV(float time, size_t ram) {
-    if (!file.is_open()) {
-        file.open(filename, std::ios_base::app);
-    }
-    file << time << "," << ram << '\n';
+    if (profiler_t.joinable()) profiler_t.join();
 }
 
 void Profiler::profiler_thread_function() {
     while (profiling) {
-        std::lock_guard<std::mutex> lock(mtx);
-        str_to_CSV(T.get_current_time(), get_memory_usage());
-        std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
+        std::lock_guard<std::mutex> lock(profiler_mtx);
+        usleep(microseconds);
+        str_to_CSV(profiler_file, profiler_filename, T.get_current_time(), get_memory_usage());
     }
 }
+
+void Profiler::add_test(const std::string& test) {
+    str_to_CSV(tests_file, tests_filename, T.get_current_time(), test);
+}
+
 
