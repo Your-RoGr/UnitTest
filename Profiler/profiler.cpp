@@ -71,4 +71,7 @@ void Profiler::add_test(const std::string& test) {
     str_to_CSV(tests_file, tests_filename, T.get_current_time(), test);
 }
 
+void Profiler::set_us(size_t _microseconds) {
+    microseconds = _microseconds;
+}
 

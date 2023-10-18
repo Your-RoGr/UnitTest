@@ -7,7 +7,6 @@ int main(int argc, char* argv[]) {
     std::string command = "python _visualization_profiler.py ";
     command += argv[1];
 
-    std::cout <<command << std::endl;
     system(command.c_str());
     return 0;
 }

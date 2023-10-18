@@ -12,6 +12,7 @@ int UnitTest::concurrency_tests = 0;
 Logger UnitTest::logger {"_unit_tests.log"};
 Profiler UnitTest::profiler {100};
 
+
 UnitTest::TestRunner::TestRunner(const std::string& type) {
     std::string command = "Profiler.exe " + type;
     t = std::thread {[command](){
@@ -37,7 +38,16 @@ void UnitTest::TestRunner::add_tests(std::function<void()> tests_) {
 
 void UnitTest::TestRunner::run_tests() {
     failed_tests = 0;
+
+    profiler.add_test("Start of tests");
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
     for (const auto& test : tests) test();
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    profiler.add_test("End of tests");
+    profiler.add_test("");
+
     int total_tests = equality_tests + exception_tests + boundary_tests + performance_tests + concurrency_tests;
     logger.info("Total tests passed: " + std::to_string(total_tests- failed_tests) + '/'
     + std::to_string(total_tests));

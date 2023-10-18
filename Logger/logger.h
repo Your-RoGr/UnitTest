@@ -29,7 +29,7 @@ private:
     std::string path_folder {};
     bool console = true;
     bool file = true;
-    bool clear_all = false;
+    bool clear_all = true;
     std::queue<std::string> log_queue_files {};
     size_t max_entries {};
     size_t max_entries_counter {};

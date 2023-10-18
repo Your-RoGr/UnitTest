@@ -34,6 +34,11 @@ public:
      * }
      * test_runner.run_tests();
      * */
+
+    void static set_us(size_t microseconds) {
+        UnitTest::profiler.set_us(microseconds);
+    }
+
     class TestRunner {
     public:
         explicit TestRunner(const std::string& type = "bytes");

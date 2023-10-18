@@ -26,6 +26,7 @@ public:
 
     explicit Profiler(size_t _microseconds = 100);
     void add_test(const std::string& test);
+    void set_us(size_t _microseconds);
     ~Profiler();
 private:
     void stop();
