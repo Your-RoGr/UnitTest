@@ -29,6 +29,13 @@ public:
         UnitTest::profiler.set_us(microseconds);
     }
 
+    enum class DataSize {
+        BYTES,
+        KB,
+        MB,
+        GB
+    };
+
     // TestRunner class for running tests
     /*
      * TestRunner test_runner {};
@@ -42,7 +49,7 @@ public:
      * */
     class TestRunner {
     public:
-        explicit TestRunner(const std::string& type = "bytes");
+        explicit TestRunner(DataSize data_size);
         ~TestRunner();
         // Add new func std::function<void()> with tests
         void add_tests(std::function<void()> tests_);
@@ -334,5 +341,21 @@ public:
             profiler.add_test('#' + std::to_string(concurrency_tests) + name);
         }
     };
+private:
+    // Returns enum class DataSize value in std::string type
+    std::string static get_data_size_string(DataSize data_size) {
+        switch (data_size) {
+            case DataSize::BYTES:
+                return "bytes";
+            case DataSize::KB:
+                return "kb";
+            case DataSize::MB:
+                return "mb";
+            case DataSize::GB:
+                return "gb";
+            default:
+                return "";
+        }
+    }
 };
 #endif //UNIT_TEST_H

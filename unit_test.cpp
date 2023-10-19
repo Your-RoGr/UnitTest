@@ -13,8 +13,9 @@ Logger UnitTest::logger {"_unit_tests.log"};
 Profiler UnitTest::profiler {100};
 
 
-UnitTest::TestRunner::TestRunner(const std::string& type) {
-    std::string command = "Profiler.exe " + type;
+// TestRunner class implementation
+UnitTest::TestRunner::TestRunner(DataSize data_size) {
+    std::string command = "Profiler.exe " + get_data_size_string(data_size);
     t = std::thread {[command](){
         system(command.c_str());
     }};
@@ -26,7 +27,6 @@ UnitTest::TestRunner::~TestRunner() {
     if (t.joinable()) t.join();
 }
 
-// TestRunner class implementation
 void UnitTest::TestRunner::add_tests(std::function<void()> tests_) {
     tests.push_back(std::move(tests_));
 }
