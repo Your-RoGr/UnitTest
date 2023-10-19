@@ -12,7 +12,7 @@
 Имеются следующие функции тестирования в class UnitTest:
 
 | Класс | Функция тестирования | Аргументы | Описание |
-|:---------------------:|:------:|:------:|  ------ | 
+|:---------------------:|:------:|:------:|:-------:| 
 | EqualityTest | assert_equals | const T& actual, <br/>const T& expected, <br/>const std::string& name, <br/>const std::string& message | Проверяет равенство аргументов actual и expected |
 | EqualityTest | assert_not_equals | const T& actual, <br/>const T& expected, <br/>const std::string& name, <br/>const std::string& message | Проверяет неравенство аргументов actual и expected |
 | ExceptionTest | assert_throws<ExceptionType> | const FuncType& func, <br/>const std::string& name, <br/>Args... args | Проверяет наличие ошибки |
