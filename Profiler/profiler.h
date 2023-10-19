@@ -25,9 +25,11 @@ private:
 public:
 
     explicit Profiler(size_t _microseconds = 100);
-    void add_test(const std::string& test);
-    void set_us(size_t _microseconds);
     ~Profiler();
+    // Add a test for writing to CSV
+    void add_test(const std::string& test);
+    // Set a new pause for profiling in microseconds
+    void set_us(size_t _microseconds);
 private:
     void stop();
 

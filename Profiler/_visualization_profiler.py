@@ -11,9 +11,11 @@ import sys
 animation_running = True
 tests_dict = {"time": [], "test": [], "color": [], "size": []}
 
+# Returns formatted data rounded to 7 digits
 def y_axis_formatter(value, _):
     return f"{round(value, 7):,}"
 
+# Redraws the profiling graph
 def update_plot(i, _ax1, _ax2, _converter):
 
     if animation_running:
@@ -81,6 +83,8 @@ def update_plot(i, _ax1, _ax2, _converter):
             legend.remove()
 
 
+# Handles arg and returns a list of type [string, int], where string is a unit of information quantity,
+# number is a divisor of this unit
 def arg_handler(arg):
     if arg == "bytes":
         return ["bytes", 1]
@@ -91,18 +95,26 @@ def arg_handler(arg):
     elif arg == "gb":
         return ["gb", 1024*1024*1024]
 
+# Starts a window with graphs
 def main(arg):
 
     converter = arg_handler(arg)
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 9), gridspec_kw={"width_ratios": [2, 1]})
 
+    # Button press event: continuing to draw a graph
+    def start_animation(event):
+        global animation_running
+        animation_running = True
+
+    # Button press event: chart drawing stop
     def stop_animation(event):
         global animation_running
         animation_running = False
 
-    def start_animation(event):
-        global animation_running
-        animation_running = True
+    # Window closing event: stopping the program
+    def on_close(event):
+        plt.close()
+        exit(0)
 
     axstop = plt.axes([0.19, 0.9, 0.05, 0.03])
     stop_button = Button(axstop, "Stop")
@@ -111,10 +123,6 @@ def main(arg):
     axstart = plt.axes([0.12, 0.9, 0.05, 0.03])
     start_button = Button(axstart, "Start")
     start_button.on_clicked(start_animation)
-
-    def on_close(event):
-        plt.close()
-        exit(0)
 
     fig.canvas.mpl_connect("close_event", on_close)
     ani = FuncAnimation(fig, update_plot, fargs=(ax1, ax2, converter), interval=1000, save_count=1)

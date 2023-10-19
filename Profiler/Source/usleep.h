@@ -8,6 +8,8 @@
 #include <thread>
 #endif
 
+// Stops the current thread for the transmitted number of microseconds
+// Needed to work on Windows
 void usleep(size_t usec);
 
 #endif // USLEEP_H

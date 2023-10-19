@@ -74,4 +74,3 @@ void Profiler::add_test(const std::string& test) {
 void Profiler::set_us(size_t _microseconds) {
     microseconds = _microseconds;
 }
-

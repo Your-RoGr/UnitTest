@@ -23,6 +23,12 @@ private:
     Logger static logger;
     Profiler static profiler;
 public:
+
+    // Sets the delay value for the profiler in microseconds
+    void static set_us(size_t microseconds) {
+        UnitTest::profiler.set_us(microseconds);
+    }
+
     // TestRunner class for running tests
     /*
      * TestRunner test_runner {};
@@ -34,17 +40,13 @@ public:
      * }
      * test_runner.run_tests();
      * */
-
-    void static set_us(size_t microseconds) {
-        UnitTest::profiler.set_us(microseconds);
-    }
-
     class TestRunner {
     public:
         explicit TestRunner(const std::string& type = "bytes");
         ~TestRunner();
-        static void clear_all_logs(bool clear_all_);
+        // Add new func std::function<void()> with tests
         void add_tests(std::function<void()> tests_);
+        // Runs all the tests
         void run_tests();
     private:
         std::thread t;
@@ -54,6 +56,8 @@ public:
     // EqualityTest class for testing equality of values
     class EqualityTest {
     public:
+
+        // EqualityTest: equality check
         template<typename T>
         static void assert_equals(const T& actual, const T& expected, const std::string& name = ".Equality",
                                   const std::string& message = "actual and expected should be equal") {
@@ -70,6 +74,7 @@ public:
             profiler.add_test('#' + std::to_string(equality_tests) + name);
         }
 
+        // EqualityTest: no equality check
         template<typename T>
         static void assert_not_equals(const T& actual, const T& expected, const std::string& name = ".Equality",
                                       const std::string& message = "actual and expected should not be equal") {
@@ -91,6 +96,8 @@ public:
     // ExceptionTest class for testing exception cases
     class ExceptionTest {
     public:
+
+        // ExceptionTest: check for a certain error thrown
         template<typename ExceptionType, typename FuncType, typename... Args>
         static void assert_throws(const FuncType& func, const std::string& name, Args... args) {
 
@@ -119,6 +126,7 @@ public:
             profiler.add_test('#' + std::to_string(exception_tests) + name);
         }
 
+        // ExceptionTest: error throw check
         template<typename FuncType, typename... Args>
         static void assert_does_not_throw(const FuncType& func, const std::string& name, Args... args) {
 
@@ -145,6 +153,8 @@ public:
     // BoundaryTest class for testing boundary cases
     class BoundaryTest {
     public:
+
+        // BoundaryTest: less check
         template<typename T>
         static void assert_less(const T& value1, const T& value2, const std::string& name = ".Boundary",
                                 const std::string& message = "value1 should be less than value2") {
@@ -161,6 +171,7 @@ public:
             profiler.add_test('#' + std::to_string(boundary_tests) + name);
         }
 
+        // BoundaryTest: less or equal check
         template<typename T>
         static void assert_less_or_equal(const T& value1, const T& value2, const std::string& name = ".Boundary",
             const std::string& message = "value2 should be greater than or equal to value1") {
@@ -178,6 +189,7 @@ public:
             profiler.add_test('#' + std::to_string(boundary_tests) + name);
         }
 
+        // BoundaryTest: greater check
         template<typename T>
         static void assert_greater(const T& value1, const T& value2, const std::string& name = ".Boundary",
                                    const std::string& message = "value1 should be greater than value2") {
@@ -195,6 +207,7 @@ public:
             profiler.add_test('#' + std::to_string(boundary_tests) + name);
         }
 
+        // BoundaryTest: greater or equal check
         template<typename T>
         static void assert_greater_or_equal(const T& value1, const T& value2, const std::string& name = ".Boundary",
             const std::string& message = "value2 should be less than or equal to value1") {
@@ -215,6 +228,8 @@ public:
 
     class PerformanceTest {
     public:
+
+        // PerformanceTest: program execution time check
         template<typename FuncType, typename... Args>
         static void time_test(const FuncType& func, const std::string& name, const float expected_time, Args... args) {
 
@@ -256,6 +271,8 @@ public:
 
     class ConcurrencyTest {
     public:
+
+        // ConcurrencyTest: check threads for errors
         template<typename FuncType, typename... Args>
         static void thread_test(const FuncType& func, const std::string& name, const size_t expected_threads, Args... args) {
 

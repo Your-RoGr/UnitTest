@@ -59,7 +59,7 @@ public:
     void set_use_console_log(bool console_);
     // true by default
     void set_use_file_log(bool file_);
-    // false by default
+    // true by default
     void set_clear_all(bool clear_all_);
     // const std::string& path_folder_ = "logs", size_t max_entries_ = 1000000 by default
     void set_filename(const std::string& filename_, const std::string& path_folder_ = "logs",

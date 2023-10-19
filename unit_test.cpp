@@ -26,11 +26,6 @@ UnitTest::TestRunner::~TestRunner() {
     if (t.joinable()) t.join();
 }
 
-void UnitTest::TestRunner::clear_all_logs(bool clear_all_) {
-    UnitTest::logger.set_clear_all(clear_all_);
-    UnitTest::logger.set_filename("_unit_tests.log");
-}
-
 // TestRunner class implementation
 void UnitTest::TestRunner::add_tests(std::function<void()> tests_) {
     tests.push_back(std::move(tests_));
