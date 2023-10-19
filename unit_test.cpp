@@ -27,8 +27,8 @@ UnitTest::TestRunner::~TestRunner() {
     if (t.joinable()) t.join();
 }
 
-void UnitTest::TestRunner::add_tests(std::function<void()> tests_) {
-    tests.push_back(std::move(tests_));
+void UnitTest::TestRunner::add_tests(std::function<void()> _tests) {
+    tests.push_back(std::move(_tests));
 }
 
 void UnitTest::TestRunner::run_tests() {

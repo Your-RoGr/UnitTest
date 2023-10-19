@@ -52,7 +52,7 @@ public:
         explicit TestRunner(DataSize data_size);
         ~TestRunner();
         // Add new func std::function<void()> with tests
-        void add_tests(std::function<void()> tests_);
+        void add_tests(std::function<void()> _tests);
         // Runs all the tests
         void run_tests();
     private:
