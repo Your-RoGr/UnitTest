@@ -4,7 +4,7 @@
 - [Features](#Features)
 - [Tech](#Tech)
 - [Installation](#Installation)
-- [Requirements installation](#Requirements installation)
+- [Requirements](#Requirements)
 - [Usage](#Usage)
 - [Files](#Files)
 
@@ -60,7 +60,7 @@ gcc -v
 ```
 4. Выбрать MinGW в IDE для компиляции (Если используете IDE)
 
-## Requirements installation
+## Requirements
 
 Предварительно необходимо установить Python 3.10 или выше с добавлением в переменные среды в системные переменные в Path:
 
