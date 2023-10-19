@@ -251,7 +251,7 @@ public:
 
                 auto time = get_time() * 1000;
 
-                if (expected_time > time) {
+                if (expected_time >= time) {
                     logger.info('#' + std::to_string(performance_tests) + name + " time_test PASSED"
                     + ": " + std::to_string(time) + " ms");
                 } else {
