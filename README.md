@@ -4,7 +4,7 @@
 - [Features](#Features)
 - [Tech](#Tech)
 - [Installation](#Installation)
-- [Requirements installation](#Requirements)
+- [Requirements installation](#Requirements installation)
 - [Usage](#Usage)
 - [Files](#Files)
 
