@@ -12,27 +12,27 @@
 
 Имеются следующие функции тестирования в class UnitTest:
 
-| Класс | Функция тестирования | Аргументы | Описание |
-|:---------------------:|:------:|:------:|:-------:| 
-| EqualityTest | assert_equals | const T& actual, <br/>const T& expected, <br/>const std::string& name, <br/>const std::string& message | Проверяет равенство аргументов actual и expected |
-| EqualityTest | assert_not_equals | const T& actual, <br/>const T& expected, <br/>const std::string& name, <br/>const std::string& message | Проверяет неравенство аргументов actual и expected |
-| ExceptionTest | assert_throws<ExceptionType> | const FuncType& func, <br/>const std::string& name, <br/>Args... args | Проверяет наличие ошибки |
-| ExceptionTest | assert_does_not_throw | const FuncType& func, <br/>const std::string& name, <br/>Args... args | Проверяет отсутствие ошибки |
-| BoundaryTest | assert_less | const T& value1, <br/>const T& value2, <br/>const std::string& name, <br/>const std::string& message | Проверяет соответствие условию value1 < value2 |
-| BoundaryTest | assert_less_or_equal | const T& value1, <br/>const T& value2, <br/>const std::string& name, <br/>const std::string& message | Проверяет соответствие условию value1 <= value2 |
-| BoundaryTest | assert_greater | const T& value1, <br/>const T& value2, <br/>const std::string& name, <br/>const std::string& message | Проверяет соответствие условию value1 > value2 |
-| BoundaryTest | assert_greater_or_equal | const T& value1, <br/>const T& value2, <br/>const std::string& name, <br/>const std::string& message | Проверяет соответствие условию value1 >= value2 |
-| PerformanceTest | time_test | const FuncType& func, <br/>const std::string& name, <br/>const float expected_time, <br/>Args... args | Проверяет соответствие условию время выполнения функции <= expected_time, expected_time измеряется в миллисекундах |
-| ConcurrencyTest | thread_test | const FuncType& func, <br/>const std::string& name, <br/>const size_t expected_threads, <br/>Args... args | Проверяет без ошибочное выполнение всех потоков, не проверяет deadlock (зависание) из-за двойного блокирования потока |
+|      Класс      |     Функция тестирования     |                                                 Аргументы                                                 |                                                       Описание                                                        |
+|:---------------:|:----------------------------:|:---------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------:| 
+|  EqualityTest   |        assert_equals         |  const T& actual, <br/>const T& expected, <br/>const std::string& name, <br/>const std::string& message   |                                   Проверяет равенство аргументов actual и expected                                    |
+|  EqualityTest   |      assert_not_equals       |  const T& actual, <br/>const T& expected, <br/>const std::string& name, <br/>const std::string& message   |                                  Проверяет неравенство аргументов actual и expected                                   |
+|  ExceptionTest  | assert_throws<ExceptionType> |                   const FuncType& func, <br/>const std::string& name, <br/>Args... args                   |                                               Проверяет наличие ошибки                                                |
+|  ExceptionTest  |    assert_does_not_throw     |                   const FuncType& func, <br/>const std::string& name, <br/>Args... args                   |                                              Проверяет отсутствие ошибки                                              |
+|  BoundaryTest   |         assert_less          |   const T& value1, <br/>const T& value2, <br/>const std::string& name, <br/>const std::string& message    |                                    Проверяет соответствие условию value1 < value2                                     |
+|  BoundaryTest   |     assert_less_or_equal     |   const T& value1, <br/>const T& value2, <br/>const std::string& name, <br/>const std::string& message    |                                    Проверяет соответствие условию value1 <= value2                                    |
+|  BoundaryTest   |        assert_greater        |   const T& value1, <br/>const T& value2, <br/>const std::string& name, <br/>const std::string& message    |                                    Проверяет соответствие условию value1 > value2                                     |
+|  BoundaryTest   |   assert_greater_or_equal    |   const T& value1, <br/>const T& value2, <br/>const std::string& name, <br/>const std::string& message    |                                    Проверяет соответствие условию value1 >= value2                                    |
+| PerformanceTest |          time_test           |   const FuncType& func, <br/>const std::string& name, <br/>const float expected_time, <br/>Args... args   |  Проверяет соответствие условию время выполнения функции <= expected_time, expected_time измеряется в миллисекундах   |
+| ConcurrencyTest |         thread_test          | const FuncType& func, <br/>const std::string& name, <br/>const size_t expected_threads, <br/>Args... args | Проверяет без ошибочное выполнение всех потоков, не проверяет deadlock (зависание) из-за двойного блокирования потока |
 
 Единицы объема данных для профилирования реализованы в виде enum class DataSize:
 
-| Единицы объема данных | Представление |
-|:------:|:------:|
-| BYTES | UnitTest::DataSize::BYTES |
-| KB | UnitTest::DataSize::KB |
-| MB | UnitTest::DataSize::MB |
-| GB | UnitTest::DataSize::GB |
+| Единицы объема данных |       Представление       |
+|:---------------------:|:-------------------------:|
+|         BYTES         | UnitTest::DataSize::BYTES |
+|          KB           |  UnitTest::DataSize::KB   |
+|          MB           |  UnitTest::DataSize::MB   |
+|          GB           |  UnitTest::DataSize::GB   |
 
 ## Tech
 
@@ -54,7 +54,7 @@
 
 1. Архив с компилятором необходимо разархивировать в удобное место (обычно в _C:\mingw64_)
 2. Добавить в переменные среды в системные переменные в Path: _C:\mingw64_ и _C:\mingw64\bin_
-4. Проверить работоспособность компилятора в консоли:
+3. Проверить работоспособность компилятора в консоли:
 ```sh
 gcc -v
 ```
@@ -86,11 +86,11 @@ pip install -r requirements.txt
 
 Для работы с юнит-тестированием используется объект class TestRunner.
 
-| Функия | Аргументы | Описание |
-|:------:|:------:|:------:|
-| TestRunner | DataSize data_size | Конструктор класса TestRunner |
-| void add_tests | std::function<void()> _tests | Добавляет функцию с тестами |
-| void run_tests | - | Запускает тестирование |
+|    Функция     |          Аргументы           |           Описание            |
+|:--------------:|:----------------------------:|:-----------------------------:|
+|   TestRunner   |      DataSize data_size      | Конструктор класса TestRunner |
+| void add_tests | std::function<void()> _tests |  Добавляет функцию с тестами  |
+| void run_tests |              -               |    Запускает тестирование     |
 
 - Пример использования EqualityTest:
 ```С++
